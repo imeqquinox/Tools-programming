@@ -62,6 +62,12 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectFrame.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectRender.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -112,6 +118,12 @@
       <Filter>MFC</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFrame.h">
+      <Filter>MFC</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectRender.h">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>

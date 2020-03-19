@@ -6,6 +6,7 @@
 #include "sqlite3.h"
 #include "SceneObject.h"
 #include "InputCommands.h"
+#include "ObjectRender.h"
 #include <vector>
 
 
@@ -23,6 +24,8 @@ public: //methods
 	afx_msg	void	onActionSave();											//save the current chunk
 	afx_msg void	onActionSaveTerrain();									//save chunk geometry
 
+	void onObjectRenderInit(HWND handle, int width, int height); 
+
 	void	Tick(MSG *msg);
 	void	UpdateInput(MSG *msg);
 
@@ -33,8 +36,6 @@ public:	//variables
 
 private:	//methods
 	void	onContentAdded();
-
-
 		
 private:	//variables
 	HWND	m_toolHandle;		//Handle to the  window
@@ -50,4 +51,6 @@ private:	//variables
 	
 	int yPos; 
 	int xPos; 
+
+	ObjectRender m_objectRenderer; 
 };

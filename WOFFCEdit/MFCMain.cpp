@@ -7,6 +7,7 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_FILE_SAVETERRAIN, &MFCMain::MenuFileSaveTerrain)
 	ON_COMMAND(ID_EDIT_SELECT, &MFCMain::MenuEditSelect)
 	ON_COMMAND(ID_BUTTON40001,	&MFCMain::ToolBarButton1)
+	ON_COMMAND(ID_OBJECT_PREVIEW, &MFCMain::MenuObjectPreview) 
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -105,10 +106,31 @@ void MFCMain::MenuEditSelect()
 
 void MFCMain::ToolBarButton1()
 {
-	
 	m_ToolSystem.onActionSave();
 }
 
+void MFCMain::MenuObjectPreview()
+{
+	m_objectFrame = new ObjectFrame(); 
+
+	m_objectFrame->Create(NULL,
+		_T("Object window"),
+		WS_OVERLAPPEDWINDOW,
+		CRect(100, 100, 1024, 786),
+		NULL,
+		NULL,
+		0,
+		NULL
+	);
+
+	m_objectFrame->ShowWindow(SW_SHOW);
+	m_objectFrame->UpdateWindow();
+
+	m_objectHandle = m_objectFrame->m_DirXView.GetSafeHwnd();
+	m_objectFrame->m_DirXView.GetClientRect(&WindowRECT);
+
+	m_ToolSystem.onObjectRenderInit(m_objectHandle, 1024, 786);
+}
 
 MFCMain::MFCMain()
 {

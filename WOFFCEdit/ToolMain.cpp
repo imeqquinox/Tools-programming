@@ -7,7 +7,6 @@
 //ToolMain Class
 ToolMain::ToolMain()
 {
-
 	m_currentChunk = 0;		//default value
 	m_selectedObject = 0;	//initial selection ID
 	m_sceneGraph.clear();	//clear the vector for the scenegraph
@@ -59,6 +58,12 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	}
 
 	onActionLoad();
+}
+
+void ToolMain::onObjectRenderInit(HWND handle, int width, int height)
+{
+	m_objectRenderer.Initialize(handle, width, height); 
+	m_objectRenderer.BuildDisplayList(&m_sceneGraph); 
 }
 
 void ToolMain::onActionLoad()
@@ -182,7 +187,6 @@ void ToolMain::onActionLoad()
 	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
 	//build the renderable chunk 
 	m_d3dRenderer.BuildDisplayChunk(&m_chunk);
-
 }
 
 void ToolMain::onActionSave()
@@ -297,11 +301,12 @@ void ToolMain::Tick(MSG *msg)
 
 	//Renderer Update Call
 	m_d3dRenderer.Tick(&m_toolInputCommands);
+
+	m_objectRenderer.Tick(); 
 }
 
 void ToolMain::UpdateInput(MSG * msg)
 {
-
 	switch (msg->message)
 	{
 		//Global inputs,  mouse position and keys etc
