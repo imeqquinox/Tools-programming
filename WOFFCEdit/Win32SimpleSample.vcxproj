@@ -174,6 +174,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MFCFrame.cpp" />
     <ClCompile Include="MFCRenderFrame.cpp" />
+    <ClCompile Include="ObjectDialogue.cpp" />
     <ClCompile Include="ObjectFrame.cpp" />
     <ClCompile Include="ObjectRender.cpp" />
     <ClCompile Include="pch.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="InputCommands.h" />
     <ClInclude Include="MFCFrame.h" />
     <ClInclude Include="MFCRenderFrame.h" />
+    <ClInclude Include="ObjectDialogue.h" />
     <ClInclude Include="ObjectFrame.h" />
     <ClInclude Include="ObjectRender.h" />
     <ClInclude Include="pch.h" />

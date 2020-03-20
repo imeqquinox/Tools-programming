@@ -18,9 +18,9 @@ ObjectRender::ObjectRender()
 	m_displayList.clear(); 
 
 	// Camera
-	m_camPosition.x = 0.0f; 
-	m_camPosition.y = 3.7f; 
-	m_camPosition.z = -3.5f;
+	m_camPosition.x = -5.0f; 
+	m_camPosition.y = 5.0f; 
+	m_camPosition.z = 5.0f;
 
 	m_camOrientation.x = 0; 
 	m_camOrientation.y = 0; 

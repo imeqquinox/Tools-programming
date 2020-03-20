@@ -15,7 +15,6 @@ BEGIN_MESSAGE_MAP(SelectDialogue, CDialogEx)
 	ON_LBN_SELCHANGE(IDC_LIST1, &SelectDialogue::Select)	//listbox
 END_MESSAGE_MAP()
 
-
 SelectDialogue::SelectDialogue(CWnd* pParent, std::vector<SceneObject>* SceneGraph)		//constructor used in modal
 	: CDialogEx(IDD_DIALOG1, pParent)
 {
@@ -46,7 +45,6 @@ void SelectDialogue::SetObjectData(std::vector<SceneObject>* SceneGraph, int * s
 		m_listBox.AddString(listBoxEntry.c_str());
 	}
 }
-
 
 void SelectDialogue::DoDataExchange(CDataExchange* pDX)
 {

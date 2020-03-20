@@ -31,7 +31,6 @@ BOOL MFCMain::InitInstance()
 	m_frame->ShowWindow(SW_SHOW);
 	m_frame->UpdateWindow();
 
-
 	//get the rect from the MFC window so we can get its dimensions
 	m_toolHandle = m_frame->m_DirXView.GetSafeHwnd();				//handle of directX child window
 	m_frame->m_DirXView.GetClientRect(&WindowRECT);
@@ -111,7 +110,7 @@ void MFCMain::ToolBarButton1()
 
 void MFCMain::MenuObjectPreview()
 {
-	m_objectFrame = new ObjectFrame(); 
+	/*m_objectFrame = new ObjectFrame(); 
 
 	m_objectFrame->Create(NULL,
 		_T("Object window"),
@@ -129,7 +128,17 @@ void MFCMain::MenuObjectPreview()
 	m_objectHandle = m_objectFrame->m_DirXView.GetSafeHwnd();
 	m_objectFrame->m_DirXView.GetClientRect(&WindowRECT);
 
-	m_ToolSystem.onObjectRenderInit(m_objectHandle, 1024, 786);
+	m_ToolSystem.onObjectRenderInit(m_objectHandle, 1024, 786);*/
+
+	m_objectDialogue.Create(IDD_DIALOG2);
+	m_objectDialogue.ShowWindow(SW_SHOW);
+	
+	m_objectHandle = m_objectDialogue.m_DirXView.GetSafeHwnd();
+	m_objectDialogue.m_DirXView.GetClientRect(&dialogueRect); 
+	dialogue_width = dialogueRect.Width(); 
+	dialogue_height = dialogueRect.Height(); 
+
+	m_ToolSystem.onObjectRenderInit(m_objectHandle, dialogue_width, dialogue_height);
 }
 
 MFCMain::MFCMain()

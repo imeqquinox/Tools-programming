@@ -68,6 +68,9 @@
     <ClCompile Include="ObjectRender.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectDialogue.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -125,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="ObjectRender.h">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectDialogue.h">
+      <Filter>MFC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

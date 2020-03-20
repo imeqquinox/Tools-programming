@@ -9,6 +9,7 @@
 #include "resource.h"
 #include "MFCFrame.h"
 #include "ObjectFrame.h"
+#include "ObjectDialogue.h"
 #include "SelectDialogue.h"
 
 class MFCMain : public CWinApp 
@@ -28,9 +29,14 @@ private:
 	CRect WindowRECT;	//Window area rectangle. 
 	SelectDialogue m_ToolSelectDialogue;			//for modeless dialogue, declare it here
 	HWND m_objectHandle; // Handle for object window
+	ObjectDialogue m_objectDialogue;
 
 	int m_width;		
 	int m_height;
+
+	CRect dialogueRect; 
+	int dialogue_width; 
+	int dialogue_height; 
 	
 	//Interface funtions for menu and toolbar etc requires
 	afx_msg void MenuFileQuit();
