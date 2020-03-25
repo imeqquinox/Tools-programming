@@ -65,7 +65,6 @@ void SelectDialogue::Select()
 	m_listBox.GetText(index, currentSelectionValue);
 
 	*m_currentSelection = _ttoi(currentSelectionValue);
-
 }
 
 BOOL SelectDialogue::OnInitDialog()
@@ -89,9 +88,6 @@ BOOL SelectDialogue::OnInitDialog()
 void SelectDialogue::PostNcDestroy()
 {
 }
-
-
-
 
 // SelectDialogue message handlers callback   - We only need this if the dailogue is being setup-with createDialogue().  We are doing
 //it manually so its better to use the messagemap

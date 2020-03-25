@@ -2,6 +2,7 @@
 #include "resource.h"
 #include <vector>
 #include <sstream>
+#include <string>
 
 //
 //ToolMain Class
@@ -11,6 +12,7 @@ ToolMain::ToolMain()
 	m_selectedObject = 0;	//initial selection ID
 	m_sceneGraph.clear();	//clear the vector for the scenegraph
 	m_databaseConnection = NULL;
+	m_currentObject = 0; 
 
 	//zero input commands
 	m_toolInputCommands.forward		= false;
@@ -20,6 +22,18 @@ ToolMain::ToolMain()
 	m_toolInputCommands.mouseX		= 0; 
 	m_toolInputCommands.mouseY		= 0; 
 	m_toolInputCommands.mouseLBDown = false; 
+
+	ModelInfo temp;
+
+	temp.name = "Default";
+	temp.model_path = "database/data/placeholder.cmo";
+	temp.tex_diffuse_path = "database/data/placeholder.dds";
+	m_models.push_back(temp);
+
+	temp.name = "Snorlax";
+	temp.model_path = "database/data/model.cmo";
+	temp.tex_diffuse_path = "database/data/placeholder.dds";
+	m_models.push_back(temp);
 }
 
 
@@ -33,6 +47,11 @@ int ToolMain::getCurrentSelectionID()
 {
 
 	return m_selectedObject;
+}
+
+int ToolMain::getObjectID()
+{
+	return m_currentObject; 
 }
 
 void ToolMain::onActionInitialise(HWND handle, int width, int height)
@@ -63,7 +82,7 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 void ToolMain::onObjectRenderInit(HWND handle, int width, int height)
 {
 	m_objectRenderer.Initialize(handle, width, height); 
-	m_objectRenderer.BuildDisplayList(&m_sceneGraph); 
+	m_objectRenderer.InitModels(&m_models);
 }
 
 void ToolMain::onActionLoad()
@@ -302,7 +321,7 @@ void ToolMain::Tick(MSG *msg)
 	//Renderer Update Call
 	m_d3dRenderer.Tick(&m_toolInputCommands);
 
-	m_objectRenderer.Tick(); 
+	m_objectRenderer.Tick(m_currentObject);
 }
 
 void ToolMain::UpdateInput(MSG * msg)

@@ -132,6 +132,9 @@
     <ClInclude Include="ObjectDialogue.h">
       <Filter>MFC</Filter>
     </ClInclude>
+    <ClInclude Include="ModelInfo.h">
+      <Filter>MFC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

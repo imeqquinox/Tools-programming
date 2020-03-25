@@ -194,6 +194,7 @@
     <ClInclude Include="InputCommands.h" />
     <ClInclude Include="MFCFrame.h" />
     <ClInclude Include="MFCRenderFrame.h" />
+    <ClInclude Include="ModelInfo.h" />
     <ClInclude Include="ObjectDialogue.h" />
     <ClInclude Include="ObjectFrame.h" />
     <ClInclude Include="ObjectRender.h" />

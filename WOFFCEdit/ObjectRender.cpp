@@ -17,6 +17,8 @@ ObjectRender::ObjectRender()
 	m_deviceResources->RegisterDeviceNotify(this); 
 	m_displayList.clear(); 
 
+	object_index = 0; 
+
 	// Camera
 	m_camPosition.x = -5.0f; 
 	m_camPosition.y = 5.0f; 
@@ -60,8 +62,10 @@ void ObjectRender::Initialize(HWND window, int width, int height)
 	CreateWindowSizeDependentResources();
 }
 
-void ObjectRender::Tick()
+void ObjectRender::Tick(int objectIndex)
 {
+	object_index = objectIndex;
+
 	if (opened)
 	{
 		m_timer.Tick([&]()
@@ -95,27 +99,98 @@ void ObjectRender::Render()
 	auto context = m_deviceResources->GetD3DDeviceContext();
 
 	//RENDER OBJECTS FROM SCENEGRAPH
-	int numRenderObjects = m_displayList.size();
-	for (int i = 0; i < numRenderObjects; i++)
-	{
-		m_deviceResources->PIXBeginEvent(L"Draw model");
-		const XMVECTORF32 scale = { m_displayList[i].m_scale.x, m_displayList[i].m_scale.y, m_displayList[i].m_scale.z };
-		const XMVECTORF32 translate = { m_displayList[i].m_position.x, m_displayList[i].m_position.y, m_displayList[i].m_position.z };
+	m_deviceResources->PIXBeginEvent(L"Draw model");
+	const XMVECTORF32 scale = { m_displayList[object_index].m_scale.x, m_displayList[object_index].m_scale.y, m_displayList[object_index].m_scale.z };
+	const XMVECTORF32 translate = { m_displayList[object_index].m_position.x, m_displayList[object_index].m_position.y, m_displayList[object_index].m_position.z };
 
-		//convert degrees into radians for rotation matrix
-		XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].m_orientation.y *3.1415 / 180,
-			m_displayList[i].m_orientation.x *3.1415 / 180,
-			m_displayList[i].m_orientation.z *3.1415 / 180);
+	//convert degrees into radians for rotation matrix
+	XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[object_index].m_orientation.y *3.1415 / 180,
+		m_displayList[object_index].m_orientation.x *3.1415 / 180,
+		m_displayList[object_index].m_orientation.z *3.1415 / 180);
 
-		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
+	XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
-		m_displayList[i].m_model->Draw(context, *m_states, local, m_view, m_projection, false);	//last variable in draw,  make TRUE for wireframe
+	m_displayList[object_index].m_model->Draw(context, *m_states, local, m_view, m_projection, false);	//last variable in draw,  make TRUE for wireframe
 
-		m_deviceResources->PIXEndEvent();
-	}
 	m_deviceResources->PIXEndEvent();
 
 	m_deviceResources->Present();
+}
+
+void ObjectRender::InitModels(std::vector<ModelInfo>* models)
+{
+	auto device = m_deviceResources->GetD3DDevice(); 
+
+	if (!m_displayList.empty())
+	{
+		m_displayList.clear(); 
+	}
+
+	int numObjects = models->size();
+	
+	for (int i = 0; i < numObjects; i++)
+	{
+		DisplayObject newDisplayObject; 
+
+		// Load model
+		std::wstring modelwstr = StringToWCHART(models->at(i).model_path);
+		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);
+
+		// Load texture
+		std::wstring texturewstr = StringToWCHART(models->at(i).tex_diffuse_path);
+		HRESULT rs;
+		rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject.m_texture_diffuse);
+
+		// If texture fails. Load error default
+		if (rs)
+		{
+			CreateDDSTextureFromFile(device, L"database/data/Error.dds", nullptr, &newDisplayObject.m_texture_diffuse);
+		}
+
+		// Apply new texture to models effect
+		newDisplayObject.m_model->UpdateEffects([&](IEffect* effect)
+		{
+			auto lights = dynamic_cast<BasicEffect*>(effect);
+
+			if (lights)
+			{
+				lights->SetTexture(newDisplayObject.m_texture_diffuse);
+			}
+		});
+
+		// Position
+		newDisplayObject.m_position.x = 0;
+		newDisplayObject.m_position.y = 0;
+		newDisplayObject.m_position.z = 0;
+
+		// Orientation 
+		newDisplayObject.m_orientation.x = 0;
+		newDisplayObject.m_orientation.y = 0;
+		newDisplayObject.m_orientation.z = 0;
+
+		// Scale 
+		newDisplayObject.m_scale.x = 5;
+		newDisplayObject.m_scale.y = 5;
+		newDisplayObject.m_scale.z = 5;
+
+		// Wireframe/Render flags
+		newDisplayObject.m_render = 1;
+		newDisplayObject.m_wireframe = 0;
+
+		newDisplayObject.m_light_type = 1;
+		newDisplayObject.m_light_diffuse_r = 2;
+		newDisplayObject.m_light_diffuse_g = 3;
+		newDisplayObject.m_light_diffuse_b = 4;
+		newDisplayObject.m_light_specular_r = 5;
+		newDisplayObject.m_light_specular_g = 6;
+		newDisplayObject.m_light_specular_b = 7;
+		newDisplayObject.m_light_spot_cutoff = 8;
+		newDisplayObject.m_light_constant = 9;
+		newDisplayObject.m_light_linear = 0;
+		newDisplayObject.m_light_quadratic = 1;
+
+		m_displayList.push_back(newDisplayObject); 
+	}
 }
 
 // Helper method to clear the back buffers.
@@ -239,84 +314,6 @@ void ObjectRender::OnDeviceRestored()
 	CreateWindowSizeDependentResources();
 }
 #pragma endregion
-
-void ObjectRender::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
-{
-	auto device = m_deviceResources->GetD3DDevice();
-	auto devicecontext = m_deviceResources->GetD3DDeviceContext();
-
-	if (!m_displayList.empty())		//is the vector empty
-	{
-		m_displayList.clear();		//if not, empty it
-	}
-
-	//for every item in the scenegraph
-	int numObjects = SceneGraph->size();
-	for (int i = 0; i < numObjects; i++)
-	{
-
-		//create a temp display object that we will populate then append to the display list.
-		DisplayObject newDisplayObject;
-
-		//load model
-		std::wstring modelwstr = StringToWCHART(SceneGraph->at(i).model_path);							//convect string to Wchar
-		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);	//get DXSDK to load model "False" for LH coordinate system (maya)
-
-		//Load Texture
-		std::wstring texturewstr = StringToWCHART(SceneGraph->at(i).tex_diffuse_path);								//convect string to Wchar
-		HRESULT rs;
-		rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
-
-		//if texture fails.  load error default
-		if (rs)
-		{
-			CreateDDSTextureFromFile(device, L"database/data/Error.dds", nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
-		}
-
-		//apply new texture to models effect
-		newDisplayObject.m_model->UpdateEffects([&](IEffect* effect) //This uses a Lambda function,  if you dont understand it: Look it up.
-		{
-			auto lights = dynamic_cast<BasicEffect*>(effect);
-			if (lights)
-			{
-				lights->SetTexture(newDisplayObject.m_texture_diffuse);
-			}
-		});
-
-		//set position
-		newDisplayObject.m_position.x = SceneGraph->at(i).posX;
-		newDisplayObject.m_position.y = SceneGraph->at(i).posY;
-		newDisplayObject.m_position.z = SceneGraph->at(i).posZ;
-
-		//setorientation
-		newDisplayObject.m_orientation.x = SceneGraph->at(i).rotX;
-		newDisplayObject.m_orientation.y = SceneGraph->at(i).rotY;
-		newDisplayObject.m_orientation.z = SceneGraph->at(i).rotZ;
-
-		//set scale
-		newDisplayObject.m_scale.x = SceneGraph->at(i).scaX;
-		newDisplayObject.m_scale.y = SceneGraph->at(i).scaY;
-		newDisplayObject.m_scale.z = SceneGraph->at(i).scaZ;
-
-		//set wireframe / render flags
-		newDisplayObject.m_render = SceneGraph->at(i).editor_render;
-		newDisplayObject.m_wireframe = SceneGraph->at(i).editor_wireframe;
-
-		newDisplayObject.m_light_type = SceneGraph->at(i).light_type;
-		newDisplayObject.m_light_diffuse_r = SceneGraph->at(i).light_diffuse_r;
-		newDisplayObject.m_light_diffuse_g = SceneGraph->at(i).light_diffuse_g;
-		newDisplayObject.m_light_diffuse_b = SceneGraph->at(i).light_diffuse_b;
-		newDisplayObject.m_light_specular_r = SceneGraph->at(i).light_specular_r;
-		newDisplayObject.m_light_specular_g = SceneGraph->at(i).light_specular_g;
-		newDisplayObject.m_light_specular_b = SceneGraph->at(i).light_specular_b;
-		newDisplayObject.m_light_spot_cutoff = SceneGraph->at(i).light_spot_cutoff;
-		newDisplayObject.m_light_constant = SceneGraph->at(i).light_constant;
-		newDisplayObject.m_light_linear = SceneGraph->at(i).light_linear;
-		newDisplayObject.m_light_quadratic = SceneGraph->at(i).light_quadratic;
-
-		m_displayList.push_back(newDisplayObject);
-	}
-}
 
 #pragma region Message Handlers
 void ObjectRender::OnActivated()

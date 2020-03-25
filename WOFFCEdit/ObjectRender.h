@@ -3,6 +3,7 @@
 #include "StepTimer.h"
 #include "SceneObject.h"
 #include "DisplayObject.h"
+#include "ModelInfo.h"
 #include <vector>
 
 class ObjectRender : public DX::IDeviceNotify
@@ -13,16 +14,15 @@ public:
 
 	void Initialize(HWND window, int width, int height); 
 	
-	void Tick(); 
-	void Render(); 
+	void Tick(int objectIndex); 
+	void Render();
+	void InitModels(std::vector<ModelInfo>* models); 
 
 	void Clear(); 
 
 	// IDeviceNotify
 	virtual void OnDeviceLost() override; 
 	virtual void OnDeviceRestored() override;
-
-	void BuildDisplayList(std::vector<SceneObject>* sceneGraph); // note vector passed by reference
 
 	// Messages
 	void OnActivated(); 
@@ -36,6 +36,7 @@ private:
 	void CreateWindowSizeDependentResources();
 
 	std::vector<DisplayObject> m_displayList; 
+	int object_index; 
 
 	// camera 
 	float m_movespeed; 

@@ -110,29 +110,10 @@ void MFCMain::ToolBarButton1()
 
 void MFCMain::MenuObjectPreview()
 {
-	/*m_objectFrame = new ObjectFrame(); 
-
-	m_objectFrame->Create(NULL,
-		_T("Object window"),
-		WS_OVERLAPPEDWINDOW,
-		CRect(100, 100, 1024, 786),
-		NULL,
-		NULL,
-		0,
-		NULL
-	);
-
-	m_objectFrame->ShowWindow(SW_SHOW);
-	m_objectFrame->UpdateWindow();
-
-	m_objectHandle = m_objectFrame->m_DirXView.GetSafeHwnd();
-	m_objectFrame->m_DirXView.GetClientRect(&WindowRECT);
-
-	m_ToolSystem.onObjectRenderInit(m_objectHandle, 1024, 786);*/
-
 	m_objectDialogue.Create(IDD_DIALOG2);
 	m_objectDialogue.ShowWindow(SW_SHOW);
-	
+	m_objectDialogue.ModelList(&m_ToolSystem.m_models, &m_ToolSystem.m_currentObject);
+
 	m_objectHandle = m_objectDialogue.m_DirXView.GetSafeHwnd();
 	m_objectDialogue.m_DirXView.GetClientRect(&dialogueRect); 
 	dialogue_width = dialogueRect.Width(); 

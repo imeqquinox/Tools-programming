@@ -7,6 +7,7 @@ BEGIN_MESSAGE_MAP(ObjectDialogue, CDialogEx)
 	ON_WM_CREATE()
 	ON_COMMAND(IDOK, &ObjectDialogue::End)
 	ON_BN_CLICKED(IDOK, &ObjectDialogue::OnBnClickedOk)
+	ON_LBN_SELCHANGE(IDC_LIST2, &ObjectDialogue::Select)
 END_MESSAGE_MAP()
 
 ObjectDialogue::ObjectDialogue(CWnd* pParent)
@@ -19,9 +20,43 @@ ObjectDialogue::~ObjectDialogue()
 {
 }
 
+void ObjectDialogue::ModelList(std::vector<ModelInfo>* models, int * objectIndex)
+{
+	currentObject_index = objectIndex;
+
+	for (int i = 0; i < models->size(); i++)
+	{
+		std::wstring listBoxEntry = ConvertString(models->at(i).name);
+		m_listBox.AddString(listBoxEntry.c_str());
+	}
+}
+
+std::wstring ObjectDialogue::ConvertString(std::string s)
+{
+	int len;
+	int slength = (int)s.length() + 1;
+	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0);
+	wchar_t* buf = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
+	std::wstring r(buf);
+	delete[] buf;
+	return r;
+}
+
+void ObjectDialogue::Select()
+{
+	int index = m_listBox.GetCurSel();
+	CString currentSelection; 
+
+	m_listBox.GetText(index, currentSelection);
+
+	*currentObject_index = index; 
+}
+
 void ObjectDialogue::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX); 
+	DDX_Control(pDX, IDC_LIST2, m_listBox);
 }
 
 int ObjectDialogue::OnCreate(LPCREATESTRUCT lpCreateStruct)
