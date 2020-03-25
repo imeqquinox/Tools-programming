@@ -5,6 +5,7 @@
 #include "MFCRenderFrame.h"
 #include "SceneObject.h"
 #include "ModelInfo.h"
+#include "ToolMain.h"
 #include <vector>
 
 class ObjectDialogue : public CDialogEx
@@ -14,7 +15,7 @@ class ObjectDialogue : public CDialogEx
 public:
 	ObjectDialogue(CWnd* pParent = NULL);
 	virtual ~ObjectDialogue(); 
-	void ModelList(std::vector<ModelInfo>* models_, int* objectIndex);
+	void Init(std::vector<ModelInfo>* models_, int* objectIndex, ToolMain* toolSystem);
 
 	CChildRender m_DirXView; 
 
@@ -23,7 +24,9 @@ public:
 #endif // AFX_DESIGN_TIME
 
 protected: 
-	int* currentObject_index; 
+	int* currentObject_index;
+	std::vector<ModelInfo>* currentModelInfo;
+	ToolMain* tool_system;
 
 	virtual void DoDataExchange(CDataExchange* pDX); 
 	afx_msg void End(); 
@@ -40,6 +43,7 @@ public:
 	virtual void PostNcDestroy();
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnBnClickedOk(); 
+	afx_msg void OnBnClickUpdate();
 };
 
 INT_PTR CALLBACK SelectProc(HWND   hwndDlg, UINT   uMsg, WPARAM wParam, LPARAM lParam);

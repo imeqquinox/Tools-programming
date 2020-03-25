@@ -117,6 +117,21 @@ void ObjectRender::Render()
 	m_deviceResources->Present();
 }
 
+void ObjectRender::UpdateParameters(ModelInfo model)
+{
+	m_displayList[object_index].m_position.x = model.GetXPos();
+	m_displayList[object_index].m_position.y = model.GetYPos(); 
+	m_displayList[object_index].m_position.z = model.GetZPos();
+
+	m_displayList[object_index].m_orientation.x = model.GetXRot();
+	m_displayList[object_index].m_orientation.y = model.GetYRot(); 
+	m_displayList[object_index].m_orientation.z = model.GetZRot(); 
+
+	m_displayList[object_index].m_scale.x = model.GetXScale(); 
+	m_displayList[object_index].m_scale.y = model.GetYScale();
+	m_displayList[object_index].m_scale.z = model.GetZScale(); 
+}
+
 void ObjectRender::InitModels(std::vector<ModelInfo>* models)
 {
 	auto device = m_deviceResources->GetD3DDevice(); 
@@ -133,11 +148,11 @@ void ObjectRender::InitModels(std::vector<ModelInfo>* models)
 		DisplayObject newDisplayObject; 
 
 		// Load model
-		std::wstring modelwstr = StringToWCHART(models->at(i).model_path);
+		std::wstring modelwstr = StringToWCHART(models->at(i).GetModelPath());
 		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);
 
 		// Load texture
-		std::wstring texturewstr = StringToWCHART(models->at(i).tex_diffuse_path);
+		std::wstring texturewstr = StringToWCHART(models->at(i).GetTexturePath());
 		HRESULT rs;
 		rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject.m_texture_diffuse);
 
@@ -169,9 +184,9 @@ void ObjectRender::InitModels(std::vector<ModelInfo>* models)
 		newDisplayObject.m_orientation.z = 0;
 
 		// Scale 
-		newDisplayObject.m_scale.x = 5;
-		newDisplayObject.m_scale.y = 5;
-		newDisplayObject.m_scale.z = 5;
+		newDisplayObject.m_scale.x = models->at(i).GetXScale();
+		newDisplayObject.m_scale.y = models->at(i).GetYScale(); 
+		newDisplayObject.m_scale.z = models->at(i).GetZScale();
 
 		// Wireframe/Render flags
 		newDisplayObject.m_render = 1;

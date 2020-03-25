@@ -31,6 +31,7 @@ public: //methods
 	void	UpdateInput(MSG *msg);
 
 	int getObjectID(); 
+	void onActionUpdateModels(); 
 
 public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk

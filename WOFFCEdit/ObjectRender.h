@@ -17,6 +17,7 @@ public:
 	void Tick(int objectIndex); 
 	void Render();
 	void InitModels(std::vector<ModelInfo>* models); 
+	void UpdateParameters(ModelInfo model); 
 
 	void Clear(); 
 

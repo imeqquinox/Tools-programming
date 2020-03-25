@@ -24,15 +24,11 @@ ToolMain::ToolMain()
 	m_toolInputCommands.mouseLBDown = false; 
 
 	ModelInfo temp;
-
-	temp.name = "Default";
-	temp.model_path = "database/data/placeholder.cmo";
-	temp.tex_diffuse_path = "database/data/placeholder.dds";
 	m_models.push_back(temp);
 
-	temp.name = "Snorlax";
-	temp.model_path = "database/data/model.cmo";
-	temp.tex_diffuse_path = "database/data/placeholder.dds";
+	temp.SetName("Snorlax");
+	temp.SetModelPath("database/data/model.cmo"); 
+	temp.SetScale(5, 5, 5);
 	m_models.push_back(temp);
 }
 
@@ -300,6 +296,12 @@ void ToolMain::onActionSave()
 void ToolMain::onActionSaveTerrain()
 {
 	m_d3dRenderer.SaveDisplayChunk(&m_chunk);
+}
+
+void ToolMain::onActionUpdateModels()
+{
+	ModelInfo temp = m_models.at(m_currentObject); 
+	m_objectRenderer.UpdateParameters(temp);
 }
 
 void ToolMain::Tick(MSG *msg)

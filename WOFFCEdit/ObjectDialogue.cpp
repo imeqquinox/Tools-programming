@@ -7,6 +7,7 @@ BEGIN_MESSAGE_MAP(ObjectDialogue, CDialogEx)
 	ON_WM_CREATE()
 	ON_COMMAND(IDOK, &ObjectDialogue::End)
 	ON_BN_CLICKED(IDOK, &ObjectDialogue::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_BUTTON1, &ObjectDialogue::OnBnClickUpdate)
 	ON_LBN_SELCHANGE(IDC_LIST2, &ObjectDialogue::Select)
 END_MESSAGE_MAP()
 
@@ -20,13 +21,16 @@ ObjectDialogue::~ObjectDialogue()
 {
 }
 
-void ObjectDialogue::ModelList(std::vector<ModelInfo>* models, int * objectIndex)
+void ObjectDialogue::Init(std::vector<ModelInfo>* models, int * objectIndex, ToolMain* toolSystem)
 {
-	currentObject_index = objectIndex;
+	//currentObject_index = objectIndex;
+	currentObject_index = &toolSystem->m_currentObject;
+	currentModelInfo = models;
+	tool_system = toolSystem;
 
-	for (int i = 0; i < models->size(); i++)
+	for (int i = 0; i < currentModelInfo->size(); i++)
 	{
-		std::wstring listBoxEntry = ConvertString(models->at(i).name);
+		std::wstring listBoxEntry = ConvertString(currentModelInfo->at(i).GetName());
 		m_listBox.AddString(listBoxEntry.c_str());
 	}
 }
@@ -81,7 +85,38 @@ void ObjectDialogue::End()
 
 void ObjectDialogue::OnBnClickedOk()
 {
+
 	CDialogEx::OnOK(); 
+}
+
+void ObjectDialogue::OnBnClickUpdate()
+{
+	CString tempNum;
+	GetDlgItemText(IDC_EDIT1, tempNum);
+	int x_pos = _ttoi(tempNum); 
+	GetDlgItemText(IDC_EDIT2, tempNum); 
+	int y_pos = _ttoi(tempNum); 
+	GetDlgItemText(IDC_EDIT3, tempNum); 
+	int z_pos = _ttoi(tempNum); 
+	currentModelInfo->at(*currentObject_index).SetPosition(x_pos, y_pos, z_pos);
+
+	GetDlgItemText(IDC_EDIT4, tempNum);
+	int x_rot = _ttoi(tempNum);
+	GetDlgItemText(IDC_EDIT5, tempNum);
+	int y_rot = _ttoi(tempNum);
+	GetDlgItemText(IDC_EDIT6, tempNum);
+	int z_rot = _ttoi(tempNum);
+	currentModelInfo->at(*currentObject_index).SetOrientation(x_rot, y_rot, z_rot);
+
+	GetDlgItemText(IDC_EDIT7, tempNum);
+	int x_scale = _ttoi(tempNum);
+	GetDlgItemText(IDC_EDIT8, tempNum);
+	int y_scale = _ttoi(tempNum);
+	GetDlgItemText(IDC_EDIT9, tempNum);
+	int z_scale = _ttoi(tempNum);
+	currentModelInfo->at(*currentObject_index).SetScale(x_scale, y_scale, z_scale);
+
+	tool_system->onActionUpdateModels(); 
 }
 
 BOOL ObjectDialogue::OnInitDialog()
@@ -95,3 +130,4 @@ BOOL ObjectDialogue::OnInitDialog()
 void ObjectDialogue::PostNcDestroy()
 {
 }
+

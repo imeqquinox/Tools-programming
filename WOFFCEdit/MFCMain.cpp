@@ -3,12 +3,13 @@
 
 
 BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
-	ON_COMMAND(ID_FILE_QUIT,	&MFCMain::MenuFileQuit)
+	ON_COMMAND(ID_FILE_QUIT, &MFCMain::MenuFileQuit)
 	ON_COMMAND(ID_FILE_SAVETERRAIN, &MFCMain::MenuFileSaveTerrain)
 	ON_COMMAND(ID_EDIT_SELECT, &MFCMain::MenuEditSelect)
-	ON_COMMAND(ID_BUTTON40001,	&MFCMain::ToolBarButton1)
-	ON_COMMAND(ID_OBJECT_PREVIEW, &MFCMain::MenuObjectPreview) 
+	ON_COMMAND(ID_BUTTON40001, &MFCMain::ToolBarButton1)
+	ON_COMMAND(ID_OBJECT_PREVIEW, &MFCMain::MenuObjectPreview)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
+	ON_BN_CLICKED(IDC_BUTTON1, &ObjectDialogue::OnBnClickUpdate)
 END_MESSAGE_MAP()
 
 BOOL MFCMain::InitInstance()
@@ -112,7 +113,7 @@ void MFCMain::MenuObjectPreview()
 {
 	m_objectDialogue.Create(IDD_DIALOG2);
 	m_objectDialogue.ShowWindow(SW_SHOW);
-	m_objectDialogue.ModelList(&m_ToolSystem.m_models, &m_ToolSystem.m_currentObject);
+	m_objectDialogue.Init(&m_ToolSystem.m_models, &m_ToolSystem.m_currentObject, &m_ToolSystem);
 
 	m_objectHandle = m_objectDialogue.m_DirXView.GetSafeHwnd();
 	m_objectDialogue.m_DirXView.GetClientRect(&dialogueRect); 
