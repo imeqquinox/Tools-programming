@@ -1,7 +1,5 @@
 #include "SceneObject.h"
 
-
-
 SceneObject::SceneObject()
 {
 	ID = 0;

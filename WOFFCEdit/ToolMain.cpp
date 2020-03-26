@@ -304,6 +304,13 @@ void ToolMain::onActionUpdateModels()
 	m_objectRenderer.UpdateParameters(temp);
 }
 
+void ToolMain::onActionAddSceneObject()
+{
+	m_sceneGraph.push_back(m_sceneObject); 
+	onActionSave(); 
+	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
+}
+
 void ToolMain::Tick(MSG *msg)
 {
 	//do we have a selection

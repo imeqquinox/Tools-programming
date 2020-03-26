@@ -32,12 +32,14 @@ public: //methods
 
 	int getObjectID(); 
 	void onActionUpdateModels(); 
+	void onActionAddSceneObject(); 
 
 public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
 	ChunkObject					m_chunk;		//our landscape chunk
 	int m_selectedObject;						//ID of current Selection
 	std::vector<ModelInfo> m_models;
+	SceneObject m_sceneObject; 
 	int m_currentObject; 
 
 private:	//methods

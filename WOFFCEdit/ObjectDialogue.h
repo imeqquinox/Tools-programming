@@ -28,6 +28,8 @@ protected:
 	std::vector<ModelInfo>* currentModelInfo;
 	ToolMain* tool_system;
 
+	SceneObject* new_object; 
+
 	virtual void DoDataExchange(CDataExchange* pDX); 
 	afx_msg void End(); 
 	afx_msg void Select(); 
