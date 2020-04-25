@@ -109,6 +109,7 @@ void MFCMain::ToolBarButton1()
 	m_ToolSystem.onActionSave();
 }
 
+// Object creation dialog
 void MFCMain::MenuObjectPreview()
 {
 	m_objectDialogue.Create(IDD_DIALOG2);
@@ -116,7 +117,7 @@ void MFCMain::MenuObjectPreview()
 	m_objectDialogue.Init(&m_ToolSystem.m_models, &m_ToolSystem.m_currentObject, &m_ToolSystem);
 
 	m_objectHandle = m_objectDialogue.m_DirXView.GetSafeHwnd();
-	m_objectDialogue.m_DirXView.GetClientRect(&dialogueRect); 
+	m_objectDialogue.m_DirXView.GetClientRect(&dialogueRect);
 	dialogue_width = dialogueRect.Width(); 
 	dialogue_height = dialogueRect.Height(); 
 

@@ -23,7 +23,6 @@ ObjectDialogue::~ObjectDialogue()
 
 void ObjectDialogue::Init(std::vector<ModelInfo>* models, int * objectIndex, ToolMain* toolSystem)
 {
-	//currentObject_index = objectIndex;
 	currentObject_index = &toolSystem->m_currentObject;
 	currentModelInfo = models;
 	tool_system = toolSystem;

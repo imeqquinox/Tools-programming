@@ -59,6 +59,7 @@ private:	//variables
 	
 	int yPos; 
 	int xPos; 
+	bool check = false;
 
 	ObjectRender m_objectRenderer; 
 };

@@ -45,7 +45,7 @@ void Camera::Update(InputCommands _input)
 	Vector3 planarMotionVector = m_camLookDirection;
 	planarMotionVector.y = 0.0f;
 
-	m_camOrientation.x = m_InputCommands.mouseY; 
+	m_camOrientation.x = -m_InputCommands.mouseY; 
 	m_camOrientation.y = -m_InputCommands.mouseX;
 
 	// Create look direction from euler angles in m_camOrientation 

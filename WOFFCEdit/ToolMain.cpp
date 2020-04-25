@@ -347,18 +347,25 @@ void ToolMain::UpdateInput(MSG * msg)
 		break;
 
 	case WM_MOUSEMOVE:
-		m_toolInputCommands.mouseX = GET_X_LPARAM(msg->lParam);
-		m_toolInputCommands.mouseY = GET_Y_LPARAM(msg->lParam);
+		//m_toolInputCommands.mouseX = GET_X_LPARAM(msg->lParam);
+		//m_toolInputCommands.mouseY = GET_Y_LPARAM(msg->lParam);
+		if (check)
+		{
+			m_toolInputCommands.mouseX = GET_X_LPARAM(msg->lParam);
+			m_toolInputCommands.mouseY = GET_Y_LPARAM(msg->lParam);
+		}
 		break;
 
 	case WM_LBUTTONDOWN:
-		
 		//m_toolInputCommands.mouseLBDown = true; 
+		
 		ShowCursor(false); 
+		check = true;
 		break;
 
 	case WM_LBUTTONUP:
 		ShowCursor(true); 
+		check = false;
 		break; 
 	}
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
